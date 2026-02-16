@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Service\GiftsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
@@ -42,5 +43,19 @@ final class DefaultController extends AbstractController
             'users' => $users,
             'random_gift' => $gifList
         ]);
+    }
+
+    #[Route('/blog/{id}/{name}/{year}', name: 'blog', requirements: ['id' => '\d+', 'name' => 'shinobi|barchid'], defaults: ['year' => '2019'], methods: ['GET'])]
+    public function blog(): Response {
+        $cookie = new Cookie(
+            'user',
+            'blablabla',
+            time() + 3600,
+        );
+        $response = new Response('Welcome to my blog');
+//        $response->headers->setCookie($cookie);
+        $response->headers->clearCookie('user');
+        $response->send();
+        return $response;
     }
 }
