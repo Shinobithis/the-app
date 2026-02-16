@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\GiftsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -32,11 +33,14 @@ final class DefaultController extends AbstractController
     }
 
     #[Route('/default', name: 'default')]
-    public function default(UserRepository $userRepository): Response {
+    public function default(UserRepository $userRepository, GiftsService $gifts): Response {
         $users = $userRepository->findAll();
+        $gifList = $gifts->getGifts();
+
         return $this->render('default/index.html.twig', [
             'controller_name' => 'ShinobisController',
             'users' => $users,
+            'random_gift' => $gifList
         ]);
     }
 }
